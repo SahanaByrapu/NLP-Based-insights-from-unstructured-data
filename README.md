@@ -25,6 +25,7 @@ Vector databases => retrieval
 
 Quality: NLP, accuracy alone is not sufficient
 USefulness: summary is actually helpful
+
 1. Are these clusters been meaningful to a human
 2.Can the person takes some decisions based on system output.
 3.Explain how actually use this system in practice?

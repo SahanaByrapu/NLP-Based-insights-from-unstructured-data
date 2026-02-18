@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&family=Public+Sans:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', sans-serif;
+}
+
+code, .mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 24 95% 53%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 5.9% 10%;
+        --chart-1: 24 95% 53%;
+        --chart-2: 217 91% 60%;
+        --chart-3: 142 71% 45%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+        --radius: 0.25rem;
+    }
+
+    .dark {
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 240 5.9% 10%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 24 95% 53%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 240 4.9% 83.9%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+/* Dot grid background pattern */
+.dot-grid-bg {
+    background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+    background-size: 16px 16px;
+}
+
+.dark .dot-grid-bg {
+    background-image: radial-gradient(#27272a 1px, transparent 1px);
+}
+
+/* Card hover effect */
+.card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Tracing beam effect for active cards */
+.tracing-beam {
+    position: relative;
+}
+
+.tracing-beam::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    padding: 2px;
+    background: linear-gradient(135deg, #F97316, #3B82F6);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+/* Glassmorphism for sticky headers */
+.glass-header {
+    backdrop-filter: blur(16px);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.dark .glass-header {
+    background-color: rgba(9, 9, 11, 0.8);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d4d4d8;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1aa;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+}
+
+/* Upload zone dashed border */
+.upload-zone {
+    border: 2px dashed #d4d4d8;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.upload-zone:hover {
+    border-color: #F97316;
+    background-color: rgba(249, 115, 22, 0.05);
+}
+
+/* Metric card number styling */
+.metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+/* Sentiment badge colors */
+.sentiment-positive {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.sentiment-negative {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.sentiment-neutral {
+    background-color: #f4f4f5;
+    color: #3f3f46;
+}
+
+.dark .sentiment-positive {
+    background-color: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+}
+
+.dark .sentiment-negative {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.dark .sentiment-neutral {
+    background-color: rgba(161, 161, 170, 0.2);
+    color: #a1a1aa;
+}
+
+/* Animation for loading states */
+@keyframes pulse-slow {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 2s ease-in-out infinite;
+}
+
+/* Sidebar active state */
+.sidebar-item-active {
+    background-color: rgba(249, 115, 22, 0.1);
+    border-left: 3px solid #F97316;
+}
+
+.dark .sidebar-item-active {
+    background-color: rgba(249, 115, 22, 0.15);
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+
+    [data-debug-wrapper="true"] > * {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+    }
+}
