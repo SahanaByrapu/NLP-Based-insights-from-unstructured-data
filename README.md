@@ -33,7 +33,7 @@ Create NLP-Based Insights from Unstructured Data for Amazon product review datas
 - **Frontend**: React 19 with Tailwind CSS, Shadcn/UI components, Recharts for visualization
 - **Backend**: FastAPI with async support
 - **Database**: MongoDB for storing reviews, clusters, insights
-- **ML/AI**: Sentence Transformers (all-MiniLM-L6-v2), Claude Sonnet 4.5 via Emergent LLM
+- **ML/AI**: Sentence Transformers (all-MiniLM-L6-v2), Claude Sonnet 4.5 via Open AI LLM
 
 ## What's Been Implemented
 1. **Dashboard** - Overview metrics, topic distribution chart, sentiment pie chart, recent reviews, top products
