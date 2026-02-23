@@ -19,7 +19,8 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sentence_transformers import SentenceTransformer
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -209,10 +210,10 @@ async def generate_embeddings_sentence_transformer(texts: List[str]) -> List[Lis
     embeddings = model.encode(texts, convert_to_numpy=True)
     return embeddings.tolist()
 
-async def summarize_with_claude(texts: List[str], context: str = "") -> str:
-    """Generate summary using Claude Sonnet via Emergent"""
+async def summarize_with_openai(texts: List[str], context: str = "") -> str:
+    """Generate summary using OPEN AI GPT 4.0 Models via OPENAI_API_KEY"""
     try:
-        api_key = os.environ.get('EMERGENT_LLM_KEY')
+        api_key = os.environ.get('OPENAI_API_KEY')
         if not api_key:
             return "Summary generation unavailable - API key not configured"
         
@@ -221,11 +222,16 @@ async def summarize_with_claude(texts: List[str], context: str = "") -> str:
         if len(combined_text) > 4000:
             combined_text = combined_text[:4000] + "..."
         
-        chat = LlmChat(
-            api_key=api_key,
-            session_id=str(uuid.uuid4()),
-            system_message="You are an expert business analyst. Be concise and direct."
-        ).with_model("anthropic", "claude-sonnet-4-5-20250929")
+        chat_instance = ChatOpenAI(
+        model="gpt-4o",   # or gpt-4.1
+        api_key=OPENAI_API_KEY,
+        temperature=0.7
+         )
+
+        messages = [
+        SystemMessage(content=system_prompt),
+        HumanMessage(content=user_prompt)
+         ]  
         
         prompt = f"""Analyze these customer reviews and provide a brief summary (max 200 words):
 - Main themes
@@ -237,14 +243,12 @@ Context: {context}
 Reviews:
 {combined_text}"""
 
-        user_message = UserMessage(text=prompt)
-        response = await asyncio.wait_for(chat.send_message(user_message), timeout=25.0)
-        return response
-    except asyncio.TimeoutError:
-        logger.warning("Claude API timeout")
-        return "Summary generation timed out. Please try with fewer reviews or try again."
+        response = await chat_instance.ainvoke(messages)
+        response_text = response.content
+        return response_text
+        
     except Exception as e:
-        logger.error(f"Claude summarization error: {e}")
+        logger.error(f"Open AI summarization error: {e}")
         return f"Summary generation failed: {str(e)}"
 
 async def send_slack_notification(webhook_url: str, message: dict) -> bool:
@@ -641,7 +645,7 @@ async def generate_insights(request: SummarizationRequest):
             return {"error": "No reviews found matching criteria"}
         
         review_texts = [r["review_text"] for r in reviews]
-        summary = await summarize_with_claude(review_texts, context)
+        summary = await summarize_with_openai(review_texts, context)
         
         # Create insight record
         insight = InsightResponse(
@@ -700,7 +704,7 @@ async def identify_recurring_issues():
         for topic, reviews in topic_issues.items():
             if len(reviews) >= 2:  # At least 2 reviews for a recurring issue
                 review_texts = [r["review_text"] for r in reviews[:10]]
-                summary = await summarize_with_claude(review_texts, f"Recurring issue: {topic}")
+                summary = await summarize_with_openai(review_texts, f"Recurring issue: {topic}")
                 
                 issues.append({
                     "topic": topic,
